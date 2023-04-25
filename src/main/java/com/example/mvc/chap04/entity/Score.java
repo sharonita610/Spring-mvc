@@ -59,5 +59,8 @@ public class Score {
         this.kor = dto.getKor();
         this.eng = dto.getEng();
         this.math = dto.getMath();
+
+        calcTotalAvg();
+        calcGrade();
     }
 }

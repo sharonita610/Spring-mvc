@@ -18,6 +18,9 @@ repositories {
     mavenCentral()
 }
 
+
+// 라이브러리 추가
+// 추가 이후에는 반드시 리로드할 것!!
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
@@ -28,6 +31,13 @@ dependencies {
     // jsp 설정
     implementation 'org.apache.tomcat.embed:tomcat-embed-jasper'
     implementation 'javax.servlet:jstl:1.2'
+
+    // 데이터베이스 커넥트
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    // 마리아디비 커넥터
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.0.8'
+
 }
 
 tasks.named('test') {
