@@ -6,20 +6,27 @@ package com.example.mvc.chap04.service;
 import com.example.mvc.chap04.dto.ScoreListResponseDTO;
 import com.example.mvc.chap04.dto.ScoreRequestDTO;
 import com.example.mvc.chap04.entity.Score;
-import com.example.mvc.chap04.respository.ScoreRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
+import com.example.mvc.chap04.respository.ScoreMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-@RequiredArgsConstructor // 생성자가 하나일때 이렇게 사용 가능하다.
+//@RequiredArgsConstructor // 생성자가 하나일때 이렇게 사용 가능하다.
 @Service
 public class ScoreService {
 
-    private final ScoreRepository scoreRepository;
+    private final ScoreMapper scoreRepository;
+
+    public ScoreService(ScoreMapper scoreRepository) {
+        this.scoreRepository = scoreRepository;
+    }
+
+//    @Autowired
+//    public ScoreService(@Qualifier("jdbc") ScoreRepository scoreRepository) {
+//        this.scoreRepository = scoreRepository;
+//    }
 
     // 목록조회 중간처리
     /*
@@ -33,10 +40,11 @@ public class ScoreService {
         // scoreList에서 원하는 정보만 추출하고 이름은 마스킹해서
         // 다시 DTO 리스트로 변환해줘야 한다.
 
-        return scoreRepository.findAll(sort)
+        return scoreRepository.findAll()
                 .stream()
                 .map(ScoreListResponseDTO::new)
                 .collect(toList());
+
     }
 
 

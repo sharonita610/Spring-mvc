@@ -10,7 +10,7 @@ import static java.util.Comparator.comparing;
 import static java.util.stream.Collectors.*;
 
 //@Component // 스프링 빈 등록 : 객체의 생성의 제어권을 스프링에게 위임
-@Repository
+@Repository("memory")
 public class ScoreRepositoryImpl implements ScoreRepository {
 
     // key : 학번, value: 성적정보
