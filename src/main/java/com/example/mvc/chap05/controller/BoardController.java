@@ -50,7 +50,7 @@ public class BoardController {
     public String delete(int bno) {
         System.out.println("/board/delete : GET");
         boardService.delete(bno);
-        return "redirect:board/list";
+        return "redirect:/board/list";
     }
 
     // 글 상세 조회 요청

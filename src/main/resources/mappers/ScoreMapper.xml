@@ -8,8 +8,8 @@
 
     <insert id="save">
         INSERT INTO tbl_score
-            (NAME, KOR, ENG, MATH)
-        VALUES (#{name},#{kor},#{eng},#{math})
+            (NAME, KOR, ENG, MATH,TOTAL, AVERAGE, GRADE)
+        VALUES (#{name},#{kor},#{eng},#{math},#{total},#{average},#{grade})
 
 
     </insert>
@@ -19,16 +19,24 @@
         WHERE STU_NUM = #{stuNum}
     </delete>
     
-    <resultMap id="score" type="com.example.mvc.chap04.entity.Score">
-        <result property="stuNum" column="stu_num"/>
-    </resultMap>
+<!--    <resultMap id="score" type="com.example.mvc.chap04.entity.Score">-->
+<!--        <result property="stuNum" column="stu_num"/>-->
+<!--    </resultMap>-->
 
-    <select id="findAll" resultMap="score">
+    <select id="findAll" resultType="score">
         SELECT * FROM tbl_score
-
+        <if test="sort == 'num'">
+            ORDER BY STU_NUM
+        </if>
+        <if test="sort == 'name'">
+            ORDER BY NAME
+        </if>
+        <if test="sort == 'avg'">
+            ORDER BY AVERAGE DESC
+        </if>
     </select>
 
-    <select id="findByStuNum" resultMap="score">
+    <select id="findByStuNum" resultType="score">
         select * from tbl_score
         where STU_NUM = #{stuNum}
     </select>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 에는 인터페이스 풀네임(페키지+인터페이스 이름)-->
+<mapper namespace="com.example.mvc.chap05.repository.BoardMapper">
+
+    <select id="findAll" resultType="board">
+        SELECT
+            BOARD_NO, TITLE, CONTENT, VIEW_COUNT, REG_DATE_TIME
+        FROM TBL_BOARD
+        ORDER BY BOARD_NO DESC
+
+    </select>
+
+    <select id="findOne" resultType="board">
+        SELECT
+            BOARD_NO, TITLE, CONTENT, VIEW_COUNT, REG_DATE_TIME
+        FROM TBL_BOARD
+        WHERE BOARD_NO = #{boardNo}
+
+    </select>
+
+    <insert id="save">
+        INSERT INTO tbl_board
+            (TITLE, CONTENT)
+        VALUES (#{title}, #{content})
+
+    </insert>
+
+    <delete id="deleteByNo">
+        DELETE FROM tbl_board
+        WHERE BOARD_NO = #{boardNo}
+
+
+    </delete>
+
+    <update id="upViewCount">
+        UPDATE tbl_board
+        SET VIEW_COUNT = VIEW_COUNT + 1
+        WHERE BOARD_NO = #{boardNo}
+    </update>
+
+
+</mapper>
