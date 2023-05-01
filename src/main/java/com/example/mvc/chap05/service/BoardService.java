@@ -3,6 +3,7 @@ package com.example.mvc.chap05.service;
 import com.example.mvc.chap05.dto.BoardDetailResponseDTO;
 import com.example.mvc.chap05.dto.BoardListResponseDTO;
 import com.example.mvc.chap05.dto.BoardWriteRequestDTO;
+import com.example.mvc.chap05.dto.page.Page;
 import com.example.mvc.chap05.entity.Board;
 import com.example.mvc.chap05.repository.BoardMapper;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,9 @@ public class BoardService {
 
     // 중간처리 기능 자유롭게 사용
     // 목록 중간처리
-    public List<BoardListResponseDTO> getList() {
+    public List<BoardListResponseDTO> getList(Page page) {
 
-        return boardRepository.findAll()
+        return boardRepository.findAll(page)
                 .stream()
                 .map(BoardListResponseDTO::new)
                 .collect(toList())
@@ -46,5 +47,9 @@ public class BoardService {
 
         boardRepository.upViewCount(bno);
         return new BoardDetailResponseDTO(board);
+    }
+
+    public int getCount() {
+        return boardRepository.count();
     }
 }

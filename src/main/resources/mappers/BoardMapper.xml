@@ -11,6 +11,8 @@
             BOARD_NO, TITLE, CONTENT, VIEW_COUNT, REG_DATE_TIME
         FROM TBL_BOARD
         ORDER BY BOARD_NO DESC
+        LIMIT #{pageStart}, #{amount}
+#         여기서는 getter 으로 처리해야된다.
 
     </select>
 
@@ -41,6 +43,10 @@
         SET VIEW_COUNT = VIEW_COUNT + 1
         WHERE BOARD_NO = #{boardNo}
     </update>
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_board
+    </select>
 
 
 </mapper>
