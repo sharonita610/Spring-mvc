@@ -4,12 +4,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.mvc.practicing.repository.AnimalMapper">
-<!--    mapper namespace 에 이름 넣기   -->
+    <!--    mapper namespace 에 이름 넣기   -->
 
 
-    <insert id="save">
+    <insert id="save" >
         INSERT INTO ANIMALS
             (ANI_NAME, ANI_AGE, ANI_GENDER, ANI_MOM, ANI_ADDR)
         VALUES (#{aniName} , #{aniAge} , #{aniGender} , #{aniMom} , #{aniAddr})
     </insert>
+    
+    <select id="findAll" resultType="animal">
+        SELECT        ANI_NAME, ANI_AGE, ANI_GENDER, ANI_MOM, ANI_ADDR
+        FROM ANIMALS
+
+    </select>
+
+
+    <select id="findOne" resultType="animal">
+        SELECT
+            ANI_NAME, ANI_AGE, ANI_GENDER, ANI_MOM, ANI_ADDR
+        FROM ANIMALS
+        WHERE ANI_NUM = #{aniNum}
+
+    </select>
+
+    <delete id="deleteByNum">
+        DELETE FROM ANIMALS
+        WHERE ANI_NUM = #{aniNum}
+    </delete>
+
+
 </mapper>
