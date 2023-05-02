@@ -104,20 +104,19 @@ class ReplyMapperTest {
     }
 
     @Test
-    @DisplayName("1번 게시물에서 495번 댓글을 단 사람은 잼민이 494번 일것이다.")
+    @DisplayName("495번 댓글의 글쓴이는 잼민이 494번 이고, 내용은 홍홍홍, 그리고 게시물 번호는 1번 일것이다 ")
     void findOneTest() {
 
         // given
         long replyNo = 495L;
-        long boardNo = 1L;
 
         // when
-
-        Reply one = replyMapper.findOne(boardNo);
-
-
+        Reply one = replyMapper.findOne(replyNo);
+        
         // then
-
+        assertEquals("잼민이 494", one.getReplyWriter());
+        assertEquals("홍홍홍", one.getReplyText());
+        assertEquals(1L, one.getBoardNo());
 
     }
 
