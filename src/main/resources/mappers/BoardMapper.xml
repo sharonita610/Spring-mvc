@@ -8,12 +8,21 @@
 
     <select id="findAll" resultType="board">
         SELECT
-            BOARD_NO, TITLE, CONTENT, VIEW_COUNT, REG_DATE_TIME
-        FROM TBL_BOARD
-        ORDER BY BOARD_NO DESC
+        board_no, title,
+        content, view_count, reg_date_time
+        FROM tbl_board
+        <if test="type == 'title'">
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'content'">
+            WHERE content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'tc'">
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+            OR content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        ORDER BY board_no DESC
         LIMIT #{pageStart}, #{amount}
-#         여기서는 getter 으로 처리해야된다.
-
     </select>
 
     <select id="findOne" resultType="board">
@@ -45,6 +54,16 @@
     </update>
     <select id="count" resultType="int">
         SELECT COUNT(*)
+        <if test="type == 'title'">
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'content'">
+            WHERE content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="type == 'tc'">
+            WHERE title LIKE CONCAT('%', #{keyword}, '%')
+            OR content LIKE CONCAT('%', #{keyword}, '%')
+        </if>
         FROM tbl_board
     </select>
 

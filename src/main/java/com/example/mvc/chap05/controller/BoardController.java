@@ -3,14 +3,15 @@ package com.example.mvc.chap05.controller;
 
 import com.example.mvc.chap05.dto.BoardListResponseDTO;
 import com.example.mvc.chap05.dto.BoardWriteRequestDTO;
-import com.example.mvc.chap05.dto.page.Page;
 import com.example.mvc.chap05.dto.page.PageMaker;
+import com.example.mvc.chap05.dto.page.Search;
 import com.example.mvc.chap05.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -26,16 +27,17 @@ public class BoardController {
 
     // 목록 조회 요청
     @GetMapping("/list")
-    public String list(Page page, Model model) {
+    public String list(Search page, Model model) {
        log.info("/board/list : GET");
        log.info("page : {}", page);
         List<BoardListResponseDTO> responseDTOS
                 = boardService.getList(page);
 
-        PageMaker maker = new PageMaker(page, boardService.getCount());
+        PageMaker maker = new PageMaker(page, boardService.getCount(page));
 
         model.addAttribute("bList", responseDTOS);
         model.addAttribute("maker", maker);
+        model.addAttribute("s", page);
 
         return "chap05/list";
     }
@@ -65,9 +67,10 @@ public class BoardController {
 
     // 글 상세 조회 요청
     @GetMapping("/detail")
-    public String detail(int bno, Model model) {
+    public String detail(int bno, @ModelAttribute("s") Search search, Model model) {
         System.out.println("/board/detail : GET");
         model.addAttribute("b", boardService.getDetail(bno));
+//        model.addAttribute("s", search); 파라미터에 @ModelAttribute로 넣으면 지금 이 줄을 쓸 필요가 없어진다
         return "chap05/detail";
     }
 

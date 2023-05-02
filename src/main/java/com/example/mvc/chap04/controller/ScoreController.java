@@ -3,8 +3,6 @@ package com.example.mvc.chap04.controller;
 import com.example.mvc.chap04.dto.ScoreListResponseDTO;
 import com.example.mvc.chap04.dto.ScoreRequestDTO;
 import com.example.mvc.chap04.entity.Score;
-import com.example.mvc.chap04.respository.ScoreRepository;
-
 import com.example.mvc.chap04.service.ScoreService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -14,11 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static java.util.stream.Collectors.toList;
 
 
 /*
@@ -42,7 +36,7 @@ import static java.util.stream.Collectors.toList;
 @RequiredArgsConstructor // : final field만 초기화 하는 생성자
 public class ScoreController {
 
-//    private final ScoreRepository repository;
+    //    private final ScoreRepository repository;
     private final ScoreService scoreService;
 
 
@@ -69,7 +63,7 @@ public class ScoreController {
         // 입력 데이터(쿼리 스트링) 읽기
         System.out.println(" /score/register : POST" + dto);
 
-       scoreService.insertScore(dto);
+        scoreService.insertScore(dto);
 
         /*
             등록 요청에서 jsp 뷰 포워딩을 하면

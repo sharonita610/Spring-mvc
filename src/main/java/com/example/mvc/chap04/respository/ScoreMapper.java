@@ -9,7 +9,7 @@ import java.util.List;
 public interface ScoreMapper {
 
     // 전체 목록 조회
-    List<Score> findAll();
+    List<Score> findAll(String sort);
 
     // 성적 정보 등록
     boolean save(Score score);

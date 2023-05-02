@@ -7,6 +7,7 @@ import com.example.mvc.chap04.dto.ScoreListResponseDTO;
 import com.example.mvc.chap04.dto.ScoreRequestDTO;
 import com.example.mvc.chap04.entity.Score;
 import com.example.mvc.chap04.respository.ScoreMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,6 +20,7 @@ public class ScoreService {
 
     private final ScoreMapper scoreRepository;
 
+    @Autowired
     public ScoreService(ScoreMapper scoreRepository) {
         this.scoreRepository = scoreRepository;
     }
@@ -40,7 +42,7 @@ public class ScoreService {
         // scoreList에서 원하는 정보만 추출하고 이름은 마스킹해서
         // 다시 DTO 리스트로 변환해줘야 한다.
 
-        return scoreRepository.findAll()
+        return scoreRepository.findAll(sort)
                 .stream()
                 .map(ScoreListResponseDTO::new)
                 .collect(toList());

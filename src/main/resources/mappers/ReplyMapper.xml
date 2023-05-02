@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace 에는 인터페이스 풀네임(페키지+인터페이스 이름)-->
+<mapper namespace="com.example.mvc.chap05.repository.ReplyMapper">
+
+    <insert id="save">
+        INSERT INTO TBL_REPLY
+            (REPLY_TEXT, REPLY_WRITER, BOARD_NO)
+        VALUES
+            (#{replyText}, #{replyWriter} , #{boardNo})
+    </insert>
+
+    <update id="modify">
+        UPDATE TBL_REPLY
+        SET REPLY_TEXT = #{replyText}
+        WHERE REPLY_NO = #{replyNo}
+    </update>
+
+    <delete id="deleteOne">
+        DELETE FROM TBL_REPLY
+        WHERE REPLY_NO = #{replyNo}
+    </delete>
+
+<!--    select 는 늘 result type 가 필요하다-->
+    <select id="findOne" resultType="reply">
+        SELECT
+            REPLY_NO, REPLY_TEXT, REPLY_WRITER, REPLY_DATE, BOARD_NO
+        FROM TBL_REPLY
+        WHERE REPLY_NO = #{replyNo}
+    </select>
+
+    <select id="findAll" resultType="reply">
+        SELECT
+            REPLY_NO, REPLY_TEXT, REPLY_WRITER, REPLY_DATE, BOARD_NO
+        FROM TBL_REPLY
+        WHERE BOARD_NO = #{bn}
+        ORDER BY REPLY_NO
+        LIMIT #{p.pageStart}, #{p.amount}
+    </select>
+
+    <select id="count" resultType="int">
+        SELECT COUNT(*)
+        FROM tbl_reply
+        where BOARD_NO = #{boardNo}
+
+    </select>
+
+</mapper>
