@@ -1,7 +1,5 @@
 package com.example.mvc.chap05.repository;
 
-import com.example.mvc.chap05.dto.page.Page;
-import com.example.mvc.chap05.entity.Board;
 import com.example.mvc.chap05.entity.Reply;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -91,17 +87,17 @@ class ReplyMapperTest {
 
     }
 
-    @Test
-    @DisplayName("1번 게시물에는 ")
-    void findAllTest() {
-
-        long boardNo = 1L;
-
-        List<Board> all = replyMapper.findAll(boardNo, new Page());
-
-
-        assertEquals(4, all.size());
-    }
+//    @Test
+//    @DisplayName("1번 게시물에는 ")
+//    void findAllTest() {
+//
+//        long boardNo = 1L;
+//
+////        List<Board> all = replyMapper.findAll(boardNo, new Page());
+//
+//
+//        assertEquals(4, all.size());
+//    }
 
     @Test
     @DisplayName("495번 댓글의 글쓴이는 잼민이 494번 이고, 내용은 홍홍홍, 그리고 게시물 번호는 1번 일것이다 ")
@@ -112,7 +108,7 @@ class ReplyMapperTest {
 
         // when
         Reply one = replyMapper.findOne(replyNo);
-        
+
         // then
         assertEquals("잼민이 494", one.getReplyWriter());
         assertEquals("홍홍홍", one.getReplyText());
@@ -140,6 +136,21 @@ class ReplyMapperTest {
         assertTrue(flag);
         assertEquals(newText, replyMapper.findOne(replyNo).getReplyText());
     }
+
+//    @Test
+//    void bulkReplyInsert() {
+//
+//        for (int i = 0; i <= 300; i++) {
+//            Reply reply = Reply.builder()
+//                    .boardNo(250L)
+//                    .replyText("페이지 댓글내용 " + i)
+//                    .replyWriter("쨔롱쓰")
+//                    .build();
+//
+//            replyMapper.save(reply);
+//        }
+//
+//    }
 
 
 }

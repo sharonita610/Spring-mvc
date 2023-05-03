@@ -1,7 +1,6 @@
 package com.example.mvc.chap05.repository;
 
 import com.example.mvc.chap05.dto.page.Page;
-import com.example.mvc.chap05.entity.Board;
 import com.example.mvc.chap05.entity.Reply;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -28,7 +27,7 @@ public interface ReplyMapper {
 
 
     // 댓글 목록 조회
-    List<Board> findAll(
+    List<Reply> findAll(
             @Param("bn") long boardNo,
             @Param("p") Page page);
 
