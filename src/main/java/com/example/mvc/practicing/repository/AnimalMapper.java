@@ -12,7 +12,7 @@ import java.util.List;
 public interface AnimalMapper {
 
     // 등록된 동물들의 리스트를 볼 수 있다.
-    List<Animal> findAll(String list);
+    List<Animal> findAll();
 
     // 동물등록을 할 수 있다.
     Boolean save(Animal animal);

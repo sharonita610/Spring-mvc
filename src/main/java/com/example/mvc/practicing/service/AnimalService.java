@@ -1,6 +1,7 @@
 package com.example.mvc.practicing.service;
 
 import com.example.mvc.practicing.dto.AnimalListDTO;
+import com.example.mvc.practicing.dto.AnimalRequestDTO;
 import com.example.mvc.practicing.entity.Animal;
 import com.example.mvc.practicing.repository.AnimalMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,15 +40,19 @@ public class AnimalService {
         return animalRepository.findOne(aniNum);
     }
 
-//    public boolean insertAnimal(Animal)
+    public boolean insertAnimal(AnimalRequestDTO dto){
+        return animalRepository.save(new Animal(dto));
+    }
 
-    public List<AnimalListDTO> getList(String list){
+    public List<AnimalListDTO> getList(){
 
-        return animalRepository.findAll(list)
+        return animalRepository.findAll()
                 .stream()
                 .map(AnimalListDTO::new)
                 .collect(Collectors.toList());
     }
+
+
 
 
 

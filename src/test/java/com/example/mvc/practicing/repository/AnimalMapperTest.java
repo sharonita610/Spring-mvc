@@ -24,7 +24,7 @@ class AnimalMapperTest {
                 .aniName("빼로")
                 .aniAge(6)
                 .aniGender('F')
-                .aniMom("길자")
+                .aniGuardian("길자")
                 .aniAddr("관악구")
                 .build();
 
@@ -54,7 +54,7 @@ class AnimalMapperTest {
 
         Animal one = mapper.findOne(aniNum);
 
-        assertEquals(name, one.getAniMom());
+        assertEquals(name, one.getAniGuardian());
         assertEquals("관악구", one.getAniAddr());
 
 

@@ -1,12 +1,15 @@
 package com.example.mvc.practicing.controller;
 
 import com.example.mvc.practicing.dto.AnimalListDTO;
+import com.example.mvc.practicing.dto.AnimalRequestDTO;
+import com.example.mvc.practicing.entity.Animal;
 import com.example.mvc.practicing.service.AnimalService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
@@ -37,18 +40,56 @@ public class AnimalController {
 
 
     private final AnimalService animalService;
-    private String list;
 
     // 1. 동물등록화면 보이게 하기 + 목록 조회
 
     @GetMapping("/list")
     public String list(Model model){
         log.info("/animal/list : GET!");
-        List<AnimalListDTO> list1 = animalService.getList(list);
+        List<AnimalListDTO> list1 = animalService.getList();
 
-        model.addAttribute("a",list1);
+        model.addAttribute("aList",list1);
 
-        return "praticing/list";
+        return "practicing/list";
+    }
+
+    @PostMapping("/register")
+    public String registerAnimal(AnimalRequestDTO dto){
+
+        log.info("/animal/register : POST!");
+
+        animalService.insertAnimal(dto);
+
+
+        return "redirect:/animal/list";
+    }
+
+    @GetMapping("/delete")
+    public String deleteAnimal(int aniNum){
+
+        log.info("/animal/delete : POST!");
+
+        animalService.delete(aniNum);
+
+        return "redirect:/animal/list";
+    }
+
+    @GetMapping("/detail")
+    public String animalDetail(int aniNum, Model model){
+
+        log.info("/animal/detail : GET!!");
+        Animal list =  animalService.retrieve(aniNum);
+
+        model.addAttribute("a", list);
+
+        return "practicing/detail";
+    }
+
+    @GetMapping("/newRegister")
+    public String newRegister(){
+        log.info("/animal/newRegister : GET!!");
+
+        return "practicing/register";
     }
 
 
