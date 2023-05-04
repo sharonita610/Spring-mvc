@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-@Builder
+//@Builder
 public class ReplyModifyRequestDTO extends ReplyPostRequestDTO {
 
     @NotNull
