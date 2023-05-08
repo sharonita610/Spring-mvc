@@ -79,3 +79,16 @@ button:hover {
 button.list-btn:hover {
     background: #e61e8c93;
 }
+
+/* 페이지 액티브 기능 */
+.pagination .page-item.p-active a {
+    background: #333 !important;
+    color: #fff !important;
+    cursor: default;
+    pointer-events: none;
+}
+
+.pagination .page-item:hover a {
+    background: #888 !important;
+    color: #fff !important;
+}

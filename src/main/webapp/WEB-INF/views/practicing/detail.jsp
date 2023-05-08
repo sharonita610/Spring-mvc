@@ -10,6 +10,8 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+
+
     <style>
         .wrap {
             width: 500px;
@@ -39,6 +41,9 @@
     </ul>
 
     <button><a href="/animal/list">목록으로</a></button>
+    <!-- 댓글 영역 -->
+
+
 </div>
 
 
