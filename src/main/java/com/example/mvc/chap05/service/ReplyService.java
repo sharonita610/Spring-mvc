@@ -2,6 +2,7 @@ package com.example.mvc.chap05.service;
 
 import com.example.mvc.chap05.dto.ReplyDetailResponseDTO;
 import com.example.mvc.chap05.dto.ReplyListResponseDTO;
+import com.example.mvc.chap05.dto.ReplyModifyRequestDTO;
 import com.example.mvc.chap05.dto.ReplyPostRequestDTO;
 import com.example.mvc.chap05.dto.page.Page;
 import com.example.mvc.chap05.dto.page.PageMaker;
@@ -71,11 +72,11 @@ public class ReplyService {
 
     // 댓글 수정 서비스
     @Transactional
-    public ReplyListResponseDTO modify( final ReplyPostRequestDTO dto) throws Exception{
+    public ReplyListResponseDTO modify( final ReplyModifyRequestDTO dto) throws Exception{
 
         replyMapper.modify(dto.toEntity());
 
-        return getList(dto.getBno(), new Page(1,10));
+        return getList(dto.getBoardNo(), new Page(1,10));
     }
 
 }

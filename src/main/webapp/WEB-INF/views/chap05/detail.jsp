@@ -4,22 +4,10 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <%--    <meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
-    <%--    <meta name="viewport" content="width=device-width, initial-scale=1.0">--%>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게시판 글쓰기</title>
 
-    <%--    <link rel="preconnect" href="https://fonts.googleapis.com">--%>
-    <%--    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>--%>
-    <%--    <link href="https://fonts.googleapis.com/css2?family=Single+Day&display=swap" rel="stylesheet">--%>
 
-    <%--    <!-- reset -->--%>
-    <%--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reset-css@5.0.1/reset.min.css">--%>
-
-    <%--    <!-- fontawesome css: https://fontawesome.com -->--%>
-    <%--    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css">--%>
-
-
-    <%--    <link rel="stylesheet" href="/assets/css/main.css">--%>
     <%@include file="../include/static-head.jsp" %>
     <link rel="stylesheet" href="/assets/css/detail.css">
 
@@ -62,7 +50,7 @@
                                 <label for="newReplyWriter" hidden>댓글 작성자</label>
                                 <input id="newReplyWriter" name="replyWriter" type="text"
                                        value="${loginUser.name}" class="form-control" placeholder="작성자 이름"
-                                        style="margin-bottom: 6px;">
+                                       style="margin-bottom: 6px;">
                                 <button id="replyAddBtn" type="button"
                                         class="btn btn-dark form-control">등록
                                 </button>
@@ -264,12 +252,13 @@
                 });
 
     }
+
     // 댓글 등록 처리 이벤트 함수
-    function makeReplyRegisterClickEvent(){
+    function makeReplyRegisterClickEvent() {
 
         const $regBtn = document.getElementById('replyAddBtn');
 
-        $regBtn.onclick= e =>{
+        $regBtn.onclick = e => {
 
             const $rt = document.getElementById('newReplyText');
             const $rw = document.getElementById('newReplyWriter');
@@ -277,47 +266,44 @@
             // console.log($rt);
             // console.log($rw);
 
-            // 서버로 보낼 데이터
-            const payload = {
-
-                text : $rt.value,
-                // text : document.getElementById('newReplyText').value,
-                author : $rw.value.value,
-                // author : document.getElementById('newReplyWriter').value,
-                bno : bno
-            };
 
             // 클라이언트 입력값 검증
-            if($rt.value.trim() === ''){
+            if ($rt.value.trim() === '') {
                 alert('댓글 내용은 필수입니다!');
                 return;
 
-            }
-            else if($rw.value.trim() === ''){
+            } else if ($rw.value.trim() === '') {
                 alert('댓글 작성자 이름은 필수입니다!');
                 return;
-            }
-            else if($rw.value.trim().length < 2 || $rw.value.trim().length > 8){
+            } else if ($rw.value.trim().length < 2 || $rw.value.trim().length > 8) {
                 alert('댓글 작성자 이름은 2~8자 사이로 작성하세요!');
                 return;
             }
+            // 서버로 보낼 데이터
+            const payload = {
 
+                text: $rt.value,
+                // text : document.getElementById('newReplyText').value,
+                author: $rw.value,
+                // author : document.getElementById('newReplyWriter').value,
+                bno: bno
+            };
 
 
             // GET방식을 제외하고 필요한 객체
             const requestInfo = {
-                method :'POST',
-                headers : {
-                    'content-type' : 'application/json'
+                method: 'POST',
+                headers: {
+                    'content-type': 'application/json'
                 },
-                body : JSON.stringify(payload)
+                body: JSON.stringify(payload)
             };
 
 
             // 서버에 post 요청 보내기
             fetch(URL, requestInfo)
                     .then(res => {
-                        if(res.status === 200){
+                        if (res.status === 200) {
                             alert('댓글 정상들록됨');
 
                             // 입력창 비우기
@@ -326,19 +312,130 @@
 
                             // 마지막 페이지 번호
                             const lastPageNo = document.querySelector('.pagination').dataset.fp;
+
                             getReplyList(lastPageNo);
 
                         } else {
                             alert('댓글 등록에 실패ㅠㅠ');
                         }
-                    })
+                    });
+        };
+
+
+    }
+
+    // 댓글 삭제 이벤트 처리
+    function replyRemoveClickEvent() {
+
+        const $replyData = document.getElementById('replyData');
+
+        $replyData.onclick = e => {
+
+            // a 태그 기능 막기
+            e.preventDefault();
+
+            // 삭제할 댓글의 PK값 읽기
+            const rno = e.target.closest('#replyContent').dataset.replyid;
+            if (e.target.matches('#replyDelBtn')) {
+
+
+                if (!confirm('정말 삭제합니까?')) return;
+
+                console.log(rno);
+
+                // 서버에 삭제 비동기 요청
+                fetch(URL + '/' + rno, {
+                    method: 'DELETE',
+
+                }).then(res => {
+                    if (res.status === 200) {
+                        console.log('댓글이 정상 삭제됨!');
+                        return res.json();
+                    } else {
+                        console.log('댓글 삭제 실패');
+                    }
+
+                }).then(responseResult => {
+
+                    renderReplyList(responseResult);
+                });
+
+
+            } else if (e.target.matches('#replyModBtn')) {
+
+                console.log('수정화면 진입~');
+
+                // 클릭한 수정 버튼 근처에 있는 텍스트 읽기
+
+                const replyText = e.target.parentElement.previousElementSibling.textContent;
+
+                console.log(replyText);
+
+                // 모달에 모달바디의 textarea 에 읽은 텍스트를 삽입
+                document.getElementById('modReplyText').value = replyText;
+
+                // 다음 수정 완료 처리를 위해 미리 수정창을 띄울때 댓글 번호를 모달에 붙여놓자
+                const $modal = document.querySelector('.modal');
+                $modal.dataset.rno = rno;
+
+            }
+        };
+
+    }
+
+    // 서버에 수정 비동기 요청 처리 함수
+    function replyModifyClickEvent() {
+
+        const $modBtn = document.getElementById('replyModBtn');
+
+
+        $modBtn.onclick = e => {
+
+
+            const payload = {
+                replyNo: +document.querySelector('.modal').dataset.rno,
+                boardNo: bno,
+                text: document.getElementById('modReplyText').value
+
+            }
+
+            console.log(payload);
+
+            // get 방식이 아니면 반드시 두번째 파라미터를 넣어줘야함
+            fetch(URL, {
+                method: 'PUT',
+                headers: {
+                    'content-type': 'application/json'
+                },
+
+                // 여기는 dto의 스팩대로 보내주면 된다
+                // > 위에 payload 로 처리할 수 있다. (체크를 위한것)
+                // body: JSON.stringify({
+                //     rno: document.querySelector('.modal').dataset.rno,
+                //     bno: bno,
+                //     text: document.getElementById('modReplyText').value
+                // })
+                body: JSON.stringify(payload)
+            }).then(res => {
+                if (res.status === 200) {
+                    alert('댓글이 정상 수정되었습니다');
+                    document.getElementById('modal-close').click();
+                    return res.json();
+
+                } else {
+                    alert('댓글 수정 실패!');
+                }
+
+            }).then(result => {
+                renderReplyList(result);
+
+            });
 
 
         };
 
 
     }
-
 
     // 메인 실행부
 
@@ -352,6 +449,12 @@
 
         // 댓글 등록 이벤트 등록
         makeReplyRegisterClickEvent();
+
+        // 삭제 이벤트 등록
+        replyRemoveClickEvent();
+
+        // 수정 이벤트 등록
+        replyModifyClickEvent();
 
 
     })();

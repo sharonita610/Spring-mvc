@@ -14,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @EqualsAndHashCode
 //@Builder
-public class ReplyModifyRequestDTO extends ReplyPostRequestDTO {
+public class ReplyModifyRequestDTO {
 
     @NotNull
     @Min(0) @Max(Long.MAX_VALUE) // 반드시 정수 입력하도록 체크
@@ -28,7 +28,7 @@ public class ReplyModifyRequestDTO extends ReplyPostRequestDTO {
     private String text;
 
 
-    public Reply ToEntity(){
+    public Reply toEntity(){
         return Reply.builder()
                 .replyNo(this.replyNo)
                 .boardNo(this.boardNo)
