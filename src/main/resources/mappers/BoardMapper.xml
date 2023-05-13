@@ -9,7 +9,7 @@
     <select id="findAll" resultType="board">
         SELECT
         board_no, title,
-        content, view_count, reg_date_time
+        content, view_count, reg_date_time, ACCOUNT
         FROM tbl_board
         <if test="type == 'title'">
             WHERE title LIKE CONCAT('%', #{keyword}, '%')
@@ -21,22 +21,25 @@
             WHERE title LIKE CONCAT('%', #{keyword}, '%')
             OR content LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        ORDER BY board_no DESC
+        ORDER BY board_no DESC,
         LIMIT #{pageStart}, #{amount}
     </select>
 
     <select id="findOne" resultType="board">
         SELECT
-            BOARD_NO, TITLE, CONTENT, VIEW_COUNT, REG_DATE_TIME
-        FROM TBL_BOARD
+            B.BOARD_NO, B.TITLE, B.CONTENT, B.VIEW_COUNT, B.REG_DATE_TIME
+             , B.ACCOUNT, M.NAME AS WRITER
+        FROM TBL_BOARD B
+                 JOIN tbl_member M
+                      ON B.ACCOUNT = M.ACCOUNT
         WHERE BOARD_NO = #{boardNo}
 
     </select>
 
     <insert id="save">
         INSERT INTO tbl_board
-            (TITLE, CONTENT)
-        VALUES (#{title}, #{content})
+            (TITLE, CONTENT, ACCOUNT)
+        VALUES (#{title}, #{content}, #{account})
 
     </insert>
 
@@ -54,6 +57,7 @@
     </update>
     <select id="count" resultType="int">
         SELECT COUNT(*)
+        FROM tbl_board
         <if test="type == 'title'">
             WHERE title LIKE CONCAT('%', #{keyword}, '%')
         </if>
@@ -64,7 +68,8 @@
             WHERE title LIKE CONCAT('%', #{keyword}, '%')
             OR content LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        FROM tbl_board
+
+
     </select>
 
 

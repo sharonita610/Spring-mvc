@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -34,17 +34,25 @@ public class BoardController {
             Model model,
             HttpServletRequest request
     ) {
+//         < *********************************************************************** >
+//        boolean flag = false;
+//
+//        // 세션을 확인
+//        Object login = request.getSession().getAttribute("login");
+//        if(login != null) flag = true;
+//
+//        if (!flag) return "redirect:/members/sign-in";
+//         < ********************************************************************** * >
 
-        boolean flag = false;
-        // 쿠키를 확인
-        Cookie[] cookies = request.getCookies();
-        for (Cookie c : cookies) {
-            if (c.getName().equals("login")) {
-                flag = true;
-                break;
-            }
-        }
-        if (!flag) return "redirect:/members/sign-in";
+
+//        // 쿠키를 확인
+//        Cookie[] cookies = request.getCookies();
+//        for (Cookie c : cookies) {
+//            if (c.getName().equals("login")) {
+//                flag = true;
+//                break;
+//            }
+//        }
 
         log.info("/board/list : GET");
         log.info("page : {}", page);
@@ -63,17 +71,26 @@ public class BoardController {
 
     // 글쓰기 화면 조회 요청
     @GetMapping("/write")
-    public String write() {
+    public String write(HttpSession session) {
+
+        // 이렇게 하면 일일히 검사해야된다. 그래서 intercepter을 사용해야한다.
+//        if (!LoginUtil.isLogin(session)) {
+//
+//            return "redirect:/members/sign-in";
+//        }
+
+
+
         System.out.println("/board/write : GET");
         return "chap05/write";
     }
 
     // 글 등록 요청 처리
     @PostMapping("/write")
-    public String write(BoardWriteRequestDTO dto) {
+    public String write(BoardWriteRequestDTO dto , HttpSession session) {
 
         System.out.println("/board/write : POST");
-        boardService.register(dto);
+        boardService.register(dto, session);
         return "redirect:/board/list";
     }
 

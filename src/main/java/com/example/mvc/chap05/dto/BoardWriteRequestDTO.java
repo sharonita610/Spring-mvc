@@ -9,4 +9,5 @@ public class BoardWriteRequestDTO {
 
     private String title;
     private String content;
+
 }

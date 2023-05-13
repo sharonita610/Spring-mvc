@@ -20,8 +20,10 @@
 <div id="wrap" class="form-container">
     <h1>${b.boardNo}번 게시물 내용~ </h1>
     <h2># 작성일자: ${b.date}</h2>
-    <label for="title">제목</label>
-    <input type="text" id="title" name="title" value="${b.title}" readonly>
+
+    <label for="writer">작성자</label>
+    <input type="text" id="writer" name="writer" value="${b.writer}" readonly>
+
     <label for="content">내용</label>
     <div id="content">${b.content}</div>
     <div class="buttons">
