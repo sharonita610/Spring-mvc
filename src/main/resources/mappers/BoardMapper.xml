@@ -21,7 +21,7 @@
             WHERE title LIKE CONCAT('%', #{keyword}, '%')
             OR content LIKE CONCAT('%', #{keyword}, '%')
         </if>
-        ORDER BY board_no DESC,
+        ORDER BY board_no DESC
         LIMIT #{pageStart}, #{amount}
     </select>
 

@@ -14,12 +14,7 @@
     </insert>
     <select id="findMember" resultType="member">
 
-        SELECT ACCOUNT,
-               PASSWORD,
-               NAME,
-               EMAIL,
-               AUTH,
-               REG_DATE
+        SELECT ACCOUNT, PASSWORD, NAME, EMAIL, AUTH, REG_DATE
         FROM TBL_MEMBER
         WHERE ACCOUNT = #{account}
 
@@ -38,6 +33,19 @@
         </if>
     </select>
 
+
+    <update id="saveAutoLogin">
+        UPDATE tbl_member
+        SET session_id = #{sessionId}, LIMIT_TIME = #{limitTime}
+        WHERE ACCOUNT = #{account}
+    </update>
+
+
+    <select id="findMemberByCookie" resultType="member">
+        SELECT ACCOUNT, NAME, EMAIL, AUTH, LIMIT_TIME
+        FROM tbl_member
+        WHERE session_id = #{sessionId}
+    </select>
 
 
 

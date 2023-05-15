@@ -2,18 +2,19 @@ package com.example.mvc.chap05.dto;
 
 import lombok.*;
 
-@Setter @Getter @ToString
+import java.time.LocalDateTime;
+
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @EqualsAndHashCode
 @Builder
-public class LoginUserResponseDTO {
+public class AutoLoginDTO {
 
+    private String sessionId;
+    private LocalDateTime limitTime;
     private String account;
-    private String nickName;
-    private String email;
-    private String auth;
-
-
 
 }

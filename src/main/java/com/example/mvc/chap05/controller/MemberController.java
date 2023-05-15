@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static com.example.mvc.chap05.service.LoginResult.SUCCESS;
+import static com.example.mvc.util.LoginUtil.isAutoLogin;
+import static com.example.mvc.util.LoginUtil.isLogin;
 
 @Controller
 @Slf4j
@@ -69,7 +71,7 @@ public class MemberController {
 
         String referer = request.getHeader("Referer");
 
-        log.info("referer : {}",referer);
+        log.info("referer : {}", referer);
         return "members/sign-in";
     }
 
@@ -77,10 +79,11 @@ public class MemberController {
     @PostMapping("/sign-in")
     public String signIn(LoginRequestDTO dto
                          // 리다이렉션시 2번째 응답에 데이터를 보내기 위함
-            , RedirectAttributes ra, HttpServletResponse response , HttpServletRequest request) {
+            , RedirectAttributes ra, HttpServletResponse response, HttpServletRequest request) {
         log.info("/members/sign-in POST ! - {}", dto);
 
-        LoginResult result = memberService.authenticate(dto);
+        LoginResult result = memberService.authenticate(dto, request.getSession(), response);
+
 
         // 로그인 성공시
         if (result == SUCCESS) {
@@ -111,17 +114,28 @@ public class MemberController {
 
     // 로그아웃 요청 처리
     @GetMapping("/sign-out")
-    public String signOut(HttpSession session){
+    public String signOut(HttpServletRequest request, HttpServletResponse response) {
 
-        // 세션에서 login 정보를 제거
-        session.removeAttribute("login");
+        HttpSession session = request.getSession();
+        // 로그인 중인지 확인
+        if (isLogin(session)) {
 
-        // 세션을 아예 초기화(세션만료 시간 초기화)
-        session.invalidate();
+            // 자동 로그인 상태라면 해제한다.
+            if(isAutoLogin(request)){
 
-        return "redirect:/";
+                memberService.autoLoginClear(request, response);
+            }
 
+            // 세션에서 login 정보를 제거
+            session.removeAttribute("login");
 
+            // 세션을 아예 초기화(세션만료 시간 초기화)
+            session.invalidate();
+
+            return "redirect:/";
+
+        }
+        return "redirect:/members/sign-in";
     }
 
 
