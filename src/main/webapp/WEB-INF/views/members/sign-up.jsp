@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -12,6 +12,32 @@
         .container.wrap {
             margin-top: 200px;
             margin-bottom: 200px;
+        }
+
+        .profile {
+            margin-bottom: 70px;
+            text-align: center;
+        }
+
+        .profile label {
+            font-weight: 700;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: rgb(140, 217, 248);
+        }
+
+        .profile .thumbnail-box {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 30px auto 10px;
+            cursor: pointer;
+        }
+
+        .profile .thumbnail-box img {
+            width: 200px;
+            height: 200px;
         }
     </style>
 
@@ -31,8 +57,23 @@
 
 
                     <form action="/members/sign-up" name="signup" id="signUpForm" method="post"
-                          style="margin-bottom: 0;">
+                          style="margin-bottom: 0;" enctype="multipart/form-data">
+                        <%-- *********  사진 업로드할때 enctype="multipart/form-data" 필수!!!! --%>
+                        <div class="profile">
+                            <div class="thumbnail-box">
+                                <img src="/assets/img/img-add.png" alt="프로필 썸네일">
+                            </div>
 
+                            <label>프로필 이미지 추가</label>
+
+                            <input
+                                    type="file"
+                                    id="profile-img"
+                                    accept="image/*"
+                                    style="display: none;"
+                                    name="profileImage"
+                            >
+                        </div>
 
                         <table style="cellpadding: 0; cellspacing: 0; margin: 0 auto; width: 100%">
                             <tr>
@@ -207,8 +248,6 @@
     };
 
 
-
-
     // 패스워드 확인란 입력값 검증
     const $pwCheckInput = document.getElementById('password_check');
 
@@ -311,20 +350,49 @@
     };
 
 
-
     // 회원가입 버튼 클릭 이벤트
     document.getElementById('signup-btn').onclick = e => {
 
         // 5개의 입력칸이 모두 통과되었을 경우 폼을 서브밋
         const $form = document.getElementById('signUpForm');
 
-        if(!checkResultList.includes(false)) {
+        if (!checkResultList.includes(false)) {
             $form.submit();
         } else {
             alert('입력란을 다시 확인하세요!');
         }
     };
 
+    // *************** 프로필 사진 관련 스크립트 ***************
+    const $profile = document.querySelector('.profile');
+    const $fileInput = document.getElementById('profile-img');
+
+    // 프로필 추가 영역 클릭 이벤트
+    $profile.onclick = e => {
+        $fileInput.click();
+    };
+
+
+    // 프로필 사진 선택시 썸네일 이벤트
+    $fileInput.onchange = e => {
+        // 첨부한 파일의 데이터를 읽어오기
+        const fileData = $fileInput.files[0];
+        console.log(fileData);
+
+        // 첨부파일의 바이트데이터를 읽어들이는 객체 생성
+        const reader = new FileReader();
+
+        // 파일의 바이트데이터를 읽어서 img태그의 src 속성이나
+        // a 태그의 href 속성에 넣기 위한 형태로 읽음
+        reader.readAsDataURL(fileData);
+
+        // 첨부파일이 등록되는 순산 img 태그의 이미지를 세팅
+        reader.onloadend = e => {
+            const $imgTag = document.querySelector('.thumbnail-box img');
+            $imgTag.setAttribute('src', reader.result);
+        };
+
+    };
 
 </script>
 

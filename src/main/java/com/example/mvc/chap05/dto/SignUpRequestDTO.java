@@ -1,6 +1,7 @@
 package com.example.mvc.chap05.dto;
 
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -25,4 +26,6 @@ public class SignUpRequestDTO {
     @NotBlank
     @Email
     private String email;
+
+    private MultipartFile profileImage; // jsp의 name: ㅇㅇ 이랑 동일하게 가야된다.
 }

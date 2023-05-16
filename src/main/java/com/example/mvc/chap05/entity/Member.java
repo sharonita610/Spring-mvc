@@ -33,5 +33,10 @@ public class Member {
     private LocalDateTime regDate;
     private LocalDateTime limitTime;
 
+    // db에 저장된 파일이 저장된 타입은 String 이다
+    private String profileImage;
+
+
+
 
 }

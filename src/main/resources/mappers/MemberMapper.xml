@@ -8,13 +8,13 @@
 
     <insert id="save">
         INSERT INTO TBL_MEMBER
-            (ACCOUNT, PASSWORD, NAME, EMAIL)
-        VALUES (#{account}, #{password}, #{name}, #{email})
+            (ACCOUNT, PASSWORD, NAME, EMAIL, PROFILE_IMAGE)
+        VALUES (#{account}, #{password}, #{name}, #{email}, #{profileImage})
 
     </insert>
     <select id="findMember" resultType="member">
 
-        SELECT ACCOUNT, PASSWORD, NAME, EMAIL, AUTH, REG_DATE
+        SELECT ACCOUNT, PASSWORD, NAME, EMAIL, AUTH, REG_DATE, PROFILE_IMAGE
         FROM TBL_MEMBER
         WHERE ACCOUNT = #{account}
 

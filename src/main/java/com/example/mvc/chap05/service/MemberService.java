@@ -32,7 +32,7 @@ public class MemberService {
     private final PasswordEncoder encoder;
 
     // 회원가입 처리 서비스
-    public boolean join(final SignUpRequestDTO dto) {
+    public boolean join(final SignUpRequestDTO dto, final String savePath) {
 
         // dto를 entity로 변환
         Member member = Member.builder()
@@ -40,6 +40,7 @@ public class MemberService {
                 .email(dto.getEmail())
                 .name(dto.getName())
                 .password(encoder.encode(dto.getPassword()))
+                .profileImage(savePath)
                 .build();
 
         // 매퍼에게 회원정보 전달해서 저장명령
@@ -105,6 +106,7 @@ public class MemberService {
 
     }
 
+    // 프로필사진 넣어주는 곳**********
     public void maintainLoginState(HttpSession session, String account) {
 
         // 로그인이 성공하면 세션에 로그인한 회원의 정보들을 저장
@@ -123,7 +125,9 @@ public class MemberService {
                 .account(member.getAccount())
                 .nickName(member.getName())
                 .auth(member.getAuth().toString())
-                .email(member.getEmail()).build();
+                .email(member.getEmail())
+                .profile(member.getProfileImage())
+                .build();
 
         // LoginUtil.LOGIN_KEY
         // 그정보를 세션에 저장
