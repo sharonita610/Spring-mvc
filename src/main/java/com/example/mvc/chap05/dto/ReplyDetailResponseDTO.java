@@ -17,9 +17,13 @@ public class ReplyDetailResponseDTO{
     private long rno;
     private String text;
     private String writer;
+    private String account;
+
 
     @JsonFormat(pattern = "yyyy년 MM월 dd일 HH:mm")
     private LocalDateTime regDate;
+
+    private String profile; // JSON 의 키 값이 profile 이 된다
 
     // entity를 DTO로 변환하는 생성자
     public ReplyDetailResponseDTO(Reply reply){
@@ -27,6 +31,8 @@ public class ReplyDetailResponseDTO{
         this.text = reply.getReplyText();
         this.writer = reply.getReplyWriter();
         this.regDate = reply.getReplyDate();
+        this.account = reply.getAccount();
+        this.profile = reply.getProfileImage();
     }
 
 }

@@ -8,9 +8,9 @@
 
     <insert id="save">
         INSERT INTO TBL_REPLY
-            (REPLY_TEXT, REPLY_WRITER, BOARD_NO)
+            (REPLY_TEXT, REPLY_WRITER, BOARD_NO, account)
         VALUES
-            (#{replyText}, #{replyWriter} , #{boardNo})
+            (#{replyText}, #{replyWriter} , #{boardNo}, #{account})
     </insert>
 
     <update id="modify">
@@ -34,8 +34,11 @@
 
     <select id="findAll" resultType="reply">
         SELECT
-            REPLY_NO, REPLY_TEXT, REPLY_WRITER, REPLY_DATE, BOARD_NO
-        FROM TBL_REPLY
+            A.REPLY_NO, A.REPLY_TEXT, A.REPLY_WRITER, A.REPLY_DATE, A.BOARD_NO,  A.ACCOUNT
+            , B.PROFILE_IMAGE AS profileImage
+        FROM TBL_REPLY A
+        JOIN  TBL_MEMBER B
+        ON A.ACCOUNT = B.ACCOUNT
         WHERE BOARD_NO = #{bn}
         ORDER BY REPLY_NO
         LIMIT #{p.pageStart}, #{p.amount}

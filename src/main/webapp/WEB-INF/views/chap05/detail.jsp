@@ -24,6 +24,9 @@
     <label for="writer">작성자</label>
     <input type="text" id="writer" name="writer" value="${b.writer}" readonly>
 
+
+    <label for="title">제목</label>
+    <input type="text" id="title" name="title" value="${b.title}" readonly>
     <label for="content">내용</label>
     <div id="content">${b.content}</div>
     <div class="buttons">
@@ -39,89 +42,118 @@
             <!-- 댓글 쓰기 영역 -->
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="form-group">
-                                <label for="newReplyText" hidden>댓글 내용</label>
-                                <textarea rows="3" id="newReplyText" name="replyText" class="form-control"
-                                          placeholder="댓글을 입력해주세요."></textarea>
+                    <c:if test="${empty login}">
+                        <a href="/members/sign-in">댓글은 로그인 후 작성 가능합니다.</a>
+                    </c:if>
+
+                    <c:if test="${not empty login}">
+
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="form-group">
+                                    <label for="newReplyText" hidden>댓글 내용</label>
+                                    <textarea rows="3" id="newReplyText" name="replyText" class="form-control"
+                                              placeholder="댓글을 입력해주세요."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+
+
+                                        <%-- 댓글남긴 사람의 프로필 사진 넣기 --%>
+                                    <div class="profile-box">
+                                        <c:choose>
+                                            <c:when test="${login.profile != null}">
+                                                <img src="/local${login.profile}" alt="프사">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <img src="/assets/img/anonymous.jpg" alt="프사">
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </div>
+
+
+
+                                    <label for="newReplyWriter" hidden>댓글 작성자</label>
+                                    <input id="newReplyWriter" name="replyWriter" type="text"
+                                           class="form-control" placeholder="작성자 이름"
+                                           style="margin-bottom: 6px;" value="${login.nickName}" readonly>
+                                    <button id="replyAddBtn" type="button"
+                                            class="btn btn-dark form-control">등록
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group">
-                                <label for="newReplyWriter" hidden>댓글 작성자</label>
-                                <input id="newReplyWriter" name="replyWriter" type="text"
-                                       value="${loginUser.name}" class="form-control" placeholder="작성자 이름"
-                                       style="margin-bottom: 6px;">
-                                <button id="replyAddBtn" type="button"
-                                        class="btn btn-dark form-control">등록
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    </c:if>
+
                 </div>
-            </div> <!-- end reply write -->
+            </div>
+        </div><!-- end reply write -->
 
-            <!--댓글 내용 영역-->
-            <div class="card">
-                <!-- 댓글 내용 헤더 -->
-                <div class="card-header text-white m-0" style="background: #343A40;">
-                    <div class="float-left">댓글 (<span id="replyCnt">0</span>)</div>
-                </div>
+        <!--댓글 내용 영역-->
+        <div class="card">
+            <!-- 댓글 내용 헤더 -->
+            <div class="card-header text-white m-0" style="background: #343A40;">
+                <div class="float-left">댓글 (<span id="replyCnt">0</span>)</div>
+            </div>
 
-                <!-- 댓글 내용 바디 -->
-                <div id="replyCollapse" class="card">
-                    <div id="replyData">
-                        <!--
-                        < JS로 댓글 정보 DIV삽입 >
-                    -->
-                    </div>
-
-                    <!-- 댓글 페이징 영역 -->
-                    <ul class="pagination justify-content-center">
-                        <!--
-                        < JS로 댓글 페이징 DIV삽입 >
-                    -->
-                    </ul>
-                </div>
-            </div> <!-- end reply content -->
-        </div>
-    </div> <!-- end replies row -->
-
-    <!-- 댓글 수정 모달 -->
-    <div class="modal fade bd-example-modal-lg" id="replyModifyModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header" style="background: #343A40; color: white;">
-                    <h4 class="modal-title">댓글 수정하기</h4>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal">X</button>
+            <!-- 댓글 내용 바디 -->
+            <div id="replyCollapse" class="card">
+                <div id="replyData">
+                    <!--
+                    < JS로 댓글 정보 DIV삽입 >
+                -->
                 </div>
 
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input id="modReplyId" type="hidden">
-                        <label for="modReplyText" hidden>댓글내용</label>
-                        <textarea id="modReplyText" class="form-control" placeholder="수정할 댓글 내용을 입력하세요."
-                                  rows="3"></textarea>
-                    </div>
-                </div>
+                <!-- 댓글 페이징 영역 -->
+                <ul class="pagination justify-content-center">
+                    <!--
+                    < JS로 댓글 페이징 DIV삽입 >
+                -->
+                </ul>
+            </div>
+        </div> <!-- end reply content -->
+    </div>
+</div> <!-- end replies row -->
 
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button id="replyModBtn" type="button" class="btn btn-dark">수정</button>
-                    <button id="modal-close" type="button" class="btn btn-danger"
-                            data-bs-dismiss="modal">닫기
-                    </button>
+
+<!-- 댓글 수정 모달 -->
+<div class="modal fade bd-example-modal-lg" id="replyModifyModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" style="background: #343A40; color: white;">
+                <h4 class="modal-title">댓글 수정하기</h4>
+                <button type="button" class="close text-white" data-bs-dismiss="modal">X</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="form-group">
+                    <input id="modReplyId" type="hidden">
+                    <label for="modReplyText" hidden>댓글내용</label>
+                    <textarea id="modReplyText" class="form-control" placeholder="수정할 댓글 내용을 입력하세요."
+                              rows="3"></textarea>
                 </div>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button id="replyModBtn" type="button" class="btn btn-dark">수정</button>
+                <button id="modal-close" type="button" class="btn btn-danger"
+                        data-bs-dismiss="modal">닫기
+                </button>
             </div>
         </div>
     </div>
+</div>
 
-    <!-- end replyModifyModal -->
+<!-- end replyModifyModal -->
 
+</div>
+</div> <!-- end reply write -->
 </div>
 
 <script>
@@ -131,6 +163,13 @@
 
     // 댓글 요청 URI
     const URL = '/api/v1/replies';
+
+
+    // **********login 은 session 에서 가져온다.
+    // 로그인한 회원 계정명
+    const currentAccount = '${login.account}';
+    const auth = '${login.auth}';
+
 
     // 페이지 렌더링 함수
     function renderPage({
@@ -206,11 +245,15 @@
 
         } else {
             for (let rep of replies) {
-                const {rno, writer, text, regDate} = rep;
+                const {rno, writer, text, regDate, account: replyWriter, profile } = rep;
 
                 tag += "<div id='replyContent' class='card-body' data-replyId='" + rno + "'>" +
                         "    <div class='row user-block'>" +
                         "       <span class='col-md-3'>" +
+                        // 댓글 작성자 옆에 프로필 사진 등록하기
+                        (profile
+                                ? `<img class='reply-profile' src='/local\${profile}' alt='profile'>`
+                                : `<img class='reply-profile' src='/assets/img/anonymous.jpg' alt='profile'>`) +
                         "         <b>" + writer + "</b>" +
                         "       </span>" +
                         "       <span class='offset-md-6 col-md-3 text-right'><b>" + regDate +
@@ -220,11 +263,11 @@
                         "       <div class='col-md-6'>" + text + "</div>" +
                         "       <div class='offset-md-2 col-md-4 text-right'>";
 
-                // if (currentAccount === rep.account || auth === 'ADMIN') {
-                tag +=
-                        "         <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;" +
-                        "         <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>";
-                // }
+                if (currentAccount === replyWriter || auth === 'ADMIN') {
+                    tag +=
+                            "         <a id='replyModBtn' class='btn btn-sm btn-outline-dark' data-bs-toggle='modal' data-bs-target='#replyModifyModal'>수정</a>&nbsp;" +
+                            "         <a id='replyDelBtn' class='btn btn-sm btn-outline-dark' href='#'>삭제</a>";
+                }
                 tag += "       </div>" +
                         "    </div>" +
                         " </div>";
@@ -310,7 +353,6 @@
 
                             // 입력창 비우기
                             $rt.value = '';
-                            $rw.value = '';
 
                             // 마지막 페이지 번호
                             const lastPageNo = document.querySelector('.pagination').dataset.fp;

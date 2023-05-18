@@ -1,18 +1,17 @@
 package com.example.mvc.chap05.service;
 
-import com.example.mvc.chap05.dto.ReplyDetailResponseDTO;
-import com.example.mvc.chap05.dto.ReplyListResponseDTO;
-import com.example.mvc.chap05.dto.ReplyModifyRequestDTO;
-import com.example.mvc.chap05.dto.ReplyPostRequestDTO;
+import com.example.mvc.chap05.dto.*;
 import com.example.mvc.chap05.dto.page.Page;
 import com.example.mvc.chap05.dto.page.PageMaker;
 import com.example.mvc.chap05.entity.Reply;
 import com.example.mvc.chap05.repository.ReplyMapper;
+import com.example.mvc.util.LoginUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.servlet.http.HttpSession;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +22,8 @@ import java.util.stream.Collectors;
 public class ReplyService {
 
     private final ReplyMapper replyMapper;
+    private final HttpSession session;
+
 
     // 댓글 목록 조회 서비스
     public ReplyListResponseDTO getList(long boardNo, Page page) {
@@ -48,6 +49,13 @@ public class ReplyService {
         // dto를 entity로 변환 ReplyPostRequestDTO 에서 메서드 만듬
         Reply reply = dto.toEntity();
 
+        // 세션에서 댓글 작성자 데이터 가져오기
+        LoginUserResponseDTO member = (LoginUserResponseDTO) session.getAttribute(LoginUtil.LOGIN_KEY);
+        reply.setAccount(member.getAccount());
+        reply.setReplyWriter(member.getNickName());
+
+
+
         boolean flag = replyMapper.save(reply);
 
         // 예외 처리
@@ -72,11 +80,10 @@ public class ReplyService {
 
     // 댓글 수정 서비스
     @Transactional
-    public ReplyListResponseDTO modify( final ReplyModifyRequestDTO dto) throws Exception{
-
+    public ReplyListResponseDTO modify(final ReplyModifyRequestDTO dto) throws Exception {
         replyMapper.modify(dto.toEntity());
 
-        return getList(dto.getBoardNo(), new Page(1,10));
+        return getList(dto.getBoardNo(), new Page(1, 10));
     }
 
 }
